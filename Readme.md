@@ -3,11 +3,15 @@
 [![License](https://img.shields.io/github/license/cschladetsch/monotonic.svg?label=License&maxAge=86400)](./LICENSE.txt)
 [![Release](https://img.shields.io/github/release/cschladetsch/monotonic.svg?label=Release&maxAge=60)](https://github.com/cschladetsch/monotonic/releases/latest)
 
-A boost library propsal: **Fastest C++ Allocator**. See original [boost documentation](https://htmlpreview.github.io/?https://github.com/cschladetsch/Monotonic/blob/develop/libs/monotonic/doc/html/index.html) and original [code with documentation here](https://svn.boost.org/svn/boost/sandbox/monotonic/libs/monotonic/doc/html/index.html).
+Based on a boost library propsal: **Fastest C++ Allocator**. See original [boost documentation](https://htmlpreview.github.io/?https://github.com/cschladetsch/Monotonic/blob/develop/libs/monotonic/doc/html/index.html) and original [code with documentation here](https://svn.boost.org/svn/boost/sandbox/monotonic/libs/monotonic/doc/html/index.html).
 
 This library provides the fastest way to manage memory in a C++ application. Yes, that is a bold claim. See the [exhaustive results]( http://github.com/cschladetsch/Monotonic/tree/develop/libs/monotonic/test/results/). 
 
 There are no source files - to add Monotonic functionality to your project, simply get latest and add the root folder to your include path.
+
+This is a new version, based on the original [boost proposal code](https://github.com/cschladetsch/Monotonic) code, but stripped of most of the cruft surrounding boost, so that it's easier to use.
+
+It's also now based on *CMake* rather than *Boost Jam*.
 
 ## Building
 
@@ -17,12 +21,14 @@ First, build only the requirements:
 
 From Command line 
 
-##### Windows
+### boost libs
+
+If you need the boost libraries:
 ```
 b2 address-model=64 link=static threading=multi runtime-link=shared build-dir=build\x86 install --prefix="c:\lib\boost\" filesystem chrono regex threading
 ```
 
-##### Ubuntu
+### Ubuntu
 ```
 # sudo apt-get intall libdev-boost-filesystem libdev-boost-chrono libdev-boost-regex
 ```
