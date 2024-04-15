@@ -257,13 +257,14 @@ namespace boost
                 return *elem.get_pointer();
             }
 
-            template <class T, class A0, class A1>
-            T &push(A0 a0, A1 a1)
-            {
-                element<T> &elem = push_element<T>();
-                new (elem.get_pointer()) T(a0, a1);
-                return *elem.get_pointer();
-            }
+            // TODO
+            //template <class T, class A0, class A1>
+            //T &push(A0 a0, A1 a1)
+            //{
+            //    element<T> &elem = push_element<T>();
+            //    new (elem.get_pointer()) T(a0, a1);
+            //    return *elem.get_pointer();
+            //}
 
             template <class T, size_t N>
             std::array<T, N> &push_array()
@@ -339,12 +340,11 @@ namespace boost
                 return 0;
             }
 
-            // CJS TODO
-            //template <class T>
-            //T &push()
-            //{
-            //    return fixed.push<T>();
-            //}
+            template <class T>
+            T &push(T &&value)
+            {
+                return fixed.push<T>(value);
+            }
         };
     
     } // namespace monotonic

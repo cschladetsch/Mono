@@ -7,7 +7,8 @@
 
 #include <monotonic/storage.hpp>
 #include <monotonic/static_storage.hpp>
-#include <boost/thread/mutex.hpp>
+#include <thread>
+#include <mutex>
 
 namespace boost
 {
@@ -32,7 +33,7 @@ namespace boost
         {
         private:
             Storage store;
-            mutable mutex guard;
+            mutable std::mutex guard;
 
         public:
             shared_storage()

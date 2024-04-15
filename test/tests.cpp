@@ -1,10 +1,11 @@
-// (C) 2009-2020 Christian@Schladetsch.com
-//
-//  Distributed under the Boost Software License, Version 1.0. (See accompanying
+#define CATCH_CONFIG_MAIN
+#include <monotonic/catch.hpp>
+
 //  file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 // documentation at https://svn.boost.org/svn/boost/sandbox/monotonic/libs/monotonic/doc/index.html
 // sandbox at https://svn.boost.org/svn/boost/sandbox/monotonic/
+
 
 #include <string>
 #include <iostream>
@@ -34,8 +35,8 @@
 #include <monotonic/containers/vector.hpp>
 #include <monotonic/containers/deque.hpp>
 
-#define BOOST_TEST_MODULE basic_test test
-#include <boost/test/unit_test.hpp>
+
+//void main() {}
 
 #ifdef WIN32
 // warning C4996: 'std::fill_n': Function call with parameters that may be unsafe
@@ -97,19 +98,19 @@ struct Tracked
 int Tracked::count = 0;
 
 // CJS TODO
-//BOOST_AUTO_TEST_CASE(test_stack)
+//TEST_CASE("TestStack", "[containers]")
 //{
 //    monotonic::stack<> stack;
 //    {
 //        size_t top = stack.top();
-//        int &n2 = stack.push<int>();
+//        int &n2 = stack.push<int>(52);
 //        /*
 //        float &f0 = stack.push<float>();
 //        char &n3 = stack.push<char>();
 //        Tracked &tracked = stack.push<Tracked>();
 //        boost::array<int, 42> &a = stack.push_array<int, 42>();
 //
-//        BOOST_ASSERT(stack.size() == 5);
+//        CHECK(stack.size() == 5);
 //
 //        size_t peak = stack.top();
 //        cout << "STACK:" << endl;
@@ -123,8 +124,8 @@ int Tracked::count = 0;
 //        stack.pop();
 //        stack.pop();
 //        size_t top2 = stack.top();
-//        BOOST_ASSERT(top2 == top);
-//        BOOST_ASSERT(Tracked::count == 0);
+//        CHECK(top2 == top);
+//        CHECK(Tracked::count == 0);
 //        */
 //    }
 //}
@@ -140,7 +141,7 @@ int Tracked::count = 0;
 //        Tracked &tracked = stack.push<Tracked>();
 //        //boost::array<int, 42> &a = stack.push_array<int, 42>();
 //
-//        BOOST_ASSERT(stack.size() == 5);
+//        CHECK(stack.size() == 5);
 //
 //        size_t peak = stack.top();
 //        cout << "STACK:" << endl;
@@ -155,8 +156,8 @@ int Tracked::count = 0;
 //        stack.pop();
 //        stack.pop();
 //        size_t top2 = stack.top();
-//        BOOST_ASSERT(top2 == top);
-//        BOOST_ASSERT(Tracked::count == 0);
+//        CHECK(top2 == top);
+//        CHECK(Tracked::count == 0);
 //    }
 //}
 //
@@ -207,13 +208,13 @@ void test_floats()
     //cout << int_t << ", " << float_t << "; " << int_sum << ", " << float_sum << endl;
 }
 
-BOOST_AUTO_TEST_CASE(test_reclaimable)
+TEST_CASE("test_reclaimable", "[general]")
 {
     std::vector<Tracked, monotonic::allocator<Tracked, heap_region_tag> > vec;
     monotonic::storage_base *store = &monotonic::static_storage<heap_region_tag>::get_storage();
     vec.resize(1);
     vec.erase(vec.begin());
-    BOOST_ASSERT(Tracked::count == 0);
+    CHECK(Tracked::count == 0);
 }
 
 // TODO
@@ -224,7 +225,7 @@ BOOST_AUTO_TEST_CASE(test_reclaimable)
 //        interprocess::list<int, monotonic::allocator<int> > list(storage);
 //        generate_n(back_inserter(list), 10, rand);
 //        list.sort();
-//        BOOST_ASSERT(is_sorted(list));
+//        CHECK(is_sorted(list));
 //    }
 //}
 
@@ -238,10 +239,10 @@ struct region1 {};
 //    monotonic::storage<> storage;
 //    {
 //        monotonic::set<monotonic::vector<int> > set(storage);
-//        BOOST_ASSERT(set.get_allocator().get_storage() == &storage);
+//        CHECK(set.get_allocator().get_storage() == &storage);
 //        set.insert(monotonic::vector<int>(storage));
 //        monotonic::vector<int> &v = *set.begin();
-//        BOOST_ASSERT(v.get_allocator().get_storage() == &storage);
+//        CHECK(v.get_allocator().get_storage() == &storage);
 //
 //    }
 //}
@@ -256,9 +257,9 @@ struct region1 {};
 //    str1 = "foo";
 //    str2 = "bar";
 //    str3 = "bar";
-//    BOOST_ASSERT(str2 == str3);
+//    CHECK(str2 == str3);
 //    str1 = str3;
-//    BOOST_ASSERT(str1 == str3);
+//    CHECK(str1 == str3);
 //
 //    monotonic::static_storage<>::release();
 //    monotonic::static_storage<region0>::release();
@@ -267,8 +268,8 @@ struct region1 {};
 //    monotonic::storage<> storage;
 //    {
 //        monotonic::string<> str("foo", storage);
-//        BOOST_ASSERT(str == "foo");
-//        BOOST_ASSERT(str.get_allocator().get_storage() == &storage);
+//        CHECK(str == "foo");
+//        CHECK(str.get_allocator().get_storage() == &storage);
 //    }
 //}
 //
@@ -288,11 +289,11 @@ struct region1 {};
 //    {
 //        // TODO
 //        //monotonic::map<int, monotonic::list<int> > local_map(storage);
-//        //BOOST_ASSERT(local_map.get_allocator().get_storage() == &storage);
+//        //CHECK(local_map.get_allocator().get_storage() == &storage);
 //
 //        //local_map[1].push_back(42);
 //        //
-//        //BOOST_ASSERT(local_map.get_allocator() == local_map[1].get_allocator());
+//        //CHECK(local_map.get_allocator() == local_map[1].get_allocator());
 //    }
 //}
 
@@ -308,15 +309,15 @@ struct region1 {};
 //    vec2.resize(100);
 //    fill_n(vec2.begin(), 100, 42);
 //
-//    BOOST_ASSERT(vec == vec2);
-//    BOOST_ASSERT(!(vec2 != vec));
-//    BOOST_ASSERT(!(vec < vec2));
-//    BOOST_ASSERT(!(vec2 < vec));
+//    CHECK(vec == vec2);
+//    CHECK(!(vec2 != vec));
+//    CHECK(!(vec < vec2));
+//    CHECK(!(vec2 < vec));
 //
 //    vec2[0] = 40;
-//    BOOST_ASSERT(vec2 != vec);
-//    BOOST_ASSERT(vec2 < vec);
-//    BOOST_ASSERT(!(vec < vec2));
+//    CHECK(vec2 != vec);
+//    CHECK(vec2 < vec);
+//    CHECK(!(vec < vec2));
 //
 //    monotonic::static_storage<>::reset();
 //    monotonic::static_storage<region1>::reset();
@@ -324,16 +325,16 @@ struct region1 {};
 //    monotonic::storage<> storage;
 //    {
 //        monotonic::vector<monotonic::vector<int> > vec(storage);
-//        BOOST_ASSERT(vec.get_allocator().get_storage() == &storage);
+//        CHECK(vec.get_allocator().get_storage() == &storage);
 //        vec.resize(5);
-//        BOOST_ASSERT(vec[0].get_allocator().get_storage() == &storage);
+//        CHECK(vec[0].get_allocator().get_storage() == &storage);
 //
 //        monotonic::vector<monotonic::map<int, monotonic::string<> > > vec2(storage);
 //        vec2.resize(1);
 //        vec2[0][42] = "foo";
-//        BOOST_ASSERT(vec2.get_allocator().get_storage() == &storage);
-//        BOOST_ASSERT(vec2[0].get_allocator().get_storage() == &storage);
-//        BOOST_ASSERT(vec2[0][42].get_allocator().get_storage() == &storage);
+//        CHECK(vec2.get_allocator().get_storage() == &storage);
+//        CHECK(vec2[0].get_allocator().get_storage() == &storage);
+//        CHECK(vec2[0][42].get_allocator().get_storage() == &storage);
 //    }
 //}
 
@@ -347,13 +348,13 @@ BOOST_AUTO_TEST_CASE(test_list)
     monotonic::list<int, region1> cont2;
     fill_n(back_inserter(cont2), 100, 42);
 
-    BOOST_ASSERT(cont == cont2);
-    BOOST_ASSERT(!(cont != cont2));
-    BOOST_ASSERT(!(cont < cont2));
+    CHECK(cont == cont2);
+    CHECK(!(cont != cont2));
+    CHECK(!(cont < cont2));
     cont.front() = 5;
-    BOOST_ASSERT(cont2 != cont);
-    BOOST_ASSERT(cont < cont2);
-    BOOST_ASSERT(!(cont2 < cont));
+    CHECK(cont2 != cont);
+    CHECK(cont < cont2);
+    CHECK(!(cont2 < cont));
 
     monotonic::static_storage<>::reset();
     monotonic::static_storage<region1>::reset();
@@ -361,28 +362,28 @@ BOOST_AUTO_TEST_CASE(test_list)
     monotonic::storage<> storage;
     {
         monotonic::list<monotonic::list<int> > list(storage);
-        BOOST_ASSERT(list.get_allocator().get_storage() == &storage);
+        CHECK(list.get_allocator().get_storage() == &storage);
         list.push_back(monotonic::list<int>());
-        // CJS 2013 BOOST_ASSERT(list.get_allocator().get_storage() == list.front().get_allocator().get_storage());
+        // CJS 2013 CHECK(list.get_allocator().get_storage() == list.front().get_allocator().get_storage());
         //generate_n(back_inserter(list.front()), 100, rand);
-        //BOOST_ASSERT(!is_sorted(list.front()));
+        //CHECK(!is_sorted(list.front()));
         //size_t used_before = storage.used();
         //list.front().sort();
         //size_t used_after = storage.used();
-        //BOOST_ASSERT(used_after > used_before);
-        //BOOST_ASSERT(is_sorted(list.front()));
+        //CHECK(used_after > used_before);
+        //CHECK(is_sorted(list.front()));
     }
 }
 */
 
-BOOST_AUTO_TEST_CASE(test_deque)
+TEST_CASE("test_deque", "[containers]")
 {
     monotonic::deque<int, region0> deq0;
     monotonic::deque<int, region1> deq1;
 
     deq0.push_back(42);
     deq1.push_back(42);
-    BOOST_ASSERT(deq0 == deq1);
+    CHECK(deq0 == deq1);
 
     monotonic::static_storage<region0>::reset();
     monotonic::static_storage<region1>::reset();
@@ -397,24 +398,24 @@ BOOST_AUTO_TEST_CASE(test_chain)
 
     deq0.push_back(1);
     deq1.push_back(1);
-    BOOST_ASSERT(deq0 == deq1);
+    CHECK(deq0 == deq1);
 
     deq1.push_back(2);
     deq1.push_back(3);
-    BOOST_ASSERT(deq0 != deq1);
+    CHECK(deq0 != deq1);
 
     int sum = 0;
     // CJS 2013
     //BOOST_FOREACH(int n, deq1)
     //    sum += n;
-    //BOOST_CHECK(sum == 6);
+    //CHECK(sum == 6);
     
     monotonic::static_storage<region0>::reset();
     monotonic::static_storage<region1>::reset();
 }
 */
 
-BOOST_AUTO_TEST_CASE(test_local)
+TEST_CASE("test_local", "[storage]")
 {
     monotonic::local<region0> storage0;
     monotonic::local<region1> storage1;
@@ -426,14 +427,14 @@ BOOST_AUTO_TEST_CASE(test_local)
 
         monotonic::string<region0> str("foo");
         str += "bar";
-        BOOST_ASSERT(str == "foobar");
+        CHECK(str == "foobar");
     }
 }
 
 //struct region0 {};
 //struct region1 {};
 
-BOOST_AUTO_TEST_CASE(test_shared_allocation)
+TEST_CASE("test_shared_allocation", "[allocation]")
 {
     //// use default region and access
     //std::list<int, monotonic::allocator<int> > list;
@@ -451,7 +452,7 @@ BOOST_AUTO_TEST_CASE(test_shared_allocation)
     //monotonic::map<int, monotonic::list<monotonic::string, region1>, region0> map;
 }
 
-BOOST_AUTO_TEST_CASE(test_regional_allocation)
+TEST_CASE("test_regional_allocation", "[allocation]")
 {
     typedef std::list<int, monotonic::allocator<int, region0> > List0;
     typedef std::list<int, monotonic::allocator<int, region1> > List1;
@@ -467,19 +468,19 @@ BOOST_AUTO_TEST_CASE(test_regional_allocation)
 }
 
 
-BOOST_AUTO_TEST_CASE(test_local_storage)
+TEST_CASE("test_local_storage", "[allocation]")
 {
     monotonic::storage<10*1024> storage;
     {
         storage.allocate_bytes(123);
-        BOOST_ASSERT(storage.fixed_used() == 123);
-        BOOST_ASSERT(storage.heap_used() == 0);
-        BOOST_ASSERT(storage.used() == 123);
+        CHECK(storage.fixed_used() == 123);
+        CHECK(storage.heap_used() == 0);
+        CHECK(storage.used() == 123);
 
         storage.reset();
-        BOOST_ASSERT(storage.fixed_used() == 0);
-        BOOST_ASSERT(storage.heap_used() == 0);
-        BOOST_ASSERT(storage.used() == 0);
+        CHECK(storage.fixed_used() == 0);
+        CHECK(storage.heap_used() == 0);
+        CHECK(storage.used() == 0);
 
         // test alignment
         storage.reset();
@@ -490,31 +491,30 @@ BOOST_AUTO_TEST_CASE(test_local_storage)
     }
 }
 
-BOOST_AUTO_TEST_CASE(test_local_storage_to_heap)
+TEST_CASE("test_local_storage_to_heap", "[storage]")
 {
-    return;
     monotonic::storage<16> storage;
     {
         storage.allocate_bytes(16);
-        BOOST_ASSERT(storage.heap_used() == 0);
+        CHECK(storage.heap_used() == 0);
 
         storage.allocate_bytes(200);
-        BOOST_ASSERT(storage.heap_used() == 200);
+        CHECK(storage.heap_used() == 200);
 
         storage.release();
 
-        BOOST_ASSERT(storage.used() == 0);
+        CHECK(storage.used() == 0);
         storage.allocate_bytes<2000>();
-        BOOST_ASSERT(storage.fixed_used() == 0);
-        BOOST_ASSERT(storage.heap_used() == 2000);
+        CHECK(storage.fixed_used() == 0);
+        CHECK(storage.heap_used() == 2000);
 
         storage.allocate_bytes<10>();
-        BOOST_ASSERT(storage.fixed_used() == 10);
-        BOOST_ASSERT(storage.heap_used() == 2000);
+        CHECK(storage.fixed_used() == 10);
+        CHECK(storage.heap_used() == 2000);
     }
 }
 
-BOOST_AUTO_TEST_CASE(test_local_storage_iter)
+TEST_CASE("test_local_storage_iter", "[storage]")
 {
     size_t length = 4;
     // storage starts on the stack (in this case, 10k of it), then merges into the heap as needed
@@ -526,7 +526,7 @@ BOOST_AUTO_TEST_CASE(test_local_storage_iter)
 
         // create a new string (uses correct alignment)
         string const &s1 = storage.create<string>("foo");
-        BOOST_ASSERT(s1 == "foo");
+        CHECK(s1 == "foo");
 
         // allocate 37 bytes with alignment 1
         char *array0 = storage.allocate_bytes(37);
@@ -550,39 +550,38 @@ BOOST_AUTO_TEST_CASE(test_local_storage_iter)
     // storage is released. if this was only ever on the stack, no work is done
 }
 
-// TODO
-//BOOST_AUTO_TEST_CASE(test_ctors)
+//TEST_CASE("test_ctors", "[general]")
 //{
 //    string foo = "foo";
 //    {
 //        monotonic::vector<char> v1(foo.begin(), foo.end());
-//        BOOST_CHECK(v1.size() == 3);
-//        BOOST_CHECK(equal(v1.begin(), v1.end(), "foo"));
+//        CHECK(v1.size() == 3);
+//        CHECK(equal(v1.begin(), v1.end(), "foo"));
 //
 //        monotonic::vector<char> v2(6, 'x');
-//        BOOST_CHECK(v2.size() == 6);
-//        BOOST_CHECK(equal(v2.begin(), v2.end(), "xxxxxx"));
+//        CHECK(v2.size() == 6);
+//        CHECK(equal(v2.begin(), v2.end(), "xxxxxx"));
 //
 //        monotonic::set<char> s2(foo.begin(), foo.end());
-//        BOOST_CHECK(s2.size() == 2);
-//        BOOST_CHECK(s2.find('f') != s2.end());
-//        BOOST_CHECK(s2.find('o') != s2.end());
+//        CHECK(s2.size() == 2);
+//        CHECK(s2.find('f') != s2.end());
+//        CHECK(s2.find('o') != s2.end());
 //
 //        monotonic::vector<pair<int, string> > v;
 //        v.push_back(make_pair(42,"foo"));
 //        v.push_back(make_pair(123,"bar"));
 //
 //        monotonic::map<int, string> m1(v.begin(), v.end());
-//        BOOST_CHECK(m1.find(42) != m1.end());
-//        BOOST_CHECK(m1.find(123) != m1.end());
+//        CHECK(m1.find(42) != m1.end());
+//        CHECK(m1.find(123) != m1.end());
 //
 //        monotonic::list<int> l1(foo.begin(), foo.end());
-//        BOOST_CHECK(equal(l1.begin(), l1.end(), "foo"));
+//        CHECK(equal(l1.begin(), l1.end(), "foo"));
 //    }
 //    monotonic::reset_storage();
 //}
 
-BOOST_AUTO_TEST_CASE( test_copy )
+TEST_CASE("test_copy", "[algorithm]")
 {
     monotonic::storage<> storage;
     monotonic::vector<int> v1(storage);
@@ -594,78 +593,76 @@ BOOST_AUTO_TEST_CASE( test_copy )
     monotonic::vector<int> v2(v1);
     size_t rem2 = storage.fixed_remaining();
 
-    //BOOST_CHECK(v2 == v1);
-    //BOOST_CHECK_EQUAL(rem1 - rem2, 12 + 100*sizeof(int));
+    CHECK(v2 == v1);
+    CHECK(rem1 - rem2 == 12 + 100*sizeof(int));
 }
 
-#if 0
-
-BOOST_AUTO_TEST_CASE(test_shared_allocators)
-{
-    monotonic::storage<> sa, sb;
-    {
-        monotonic::vector<int> v0(sa), v1(sa);
-        monotonic::vector<int> v2(sb), v3(sb);
-        monotonic::list<int> l0(sa), l1(sb);
-
-        BOOST_CHECK(v0.get_allocator() == v1.get_allocator());
-        BOOST_CHECK(v2.get_allocator() == v3.get_allocator());
-        BOOST_CHECK(v0.get_allocator() != v2.get_allocator());
-        BOOST_CHECK(v3.get_allocator() != v1.get_allocator());
-
-        for (int n = 0; n < 10; ++n)
-            v0.push_back(n);
-
-        v1 = v0;
-        v1.swap(v2);    // swap from different allocators means they are copied
-        BOOST_CHECK(v1.empty() && v3.empty() && v1 == v3);
-
-        BOOST_CHECK(v2 == v0); // both are now [0..9]
-
-        v1.swap(v0);    // swap from same allocators means no copying
-        BOOST_CHECK(v2 == v1);
-        BOOST_CHECK(v0 == v3);
-
-        //l0.assign(v0.begin(), v0.end());
-        //l1 = l0;
-        //BOOST_CHECK(l0 == l1);
-    }
-}
-#endif
-
-// TODO
-//BOOST_AUTO_TEST_CASE(test_basic)
+//BOOST_AUTO_TEST_CASE(test_shared_allocators)
 //{
-//    monotonic::storage<> storage;
+//    monotonic::storage<> sa, sb;
 //    {
-//        monotonic::vector<int> v1(storage);
+//        monotonic::vector<int> v0(sa), v1(sa);
+//        monotonic::vector<int> v2(sb), v3(sb);
+//        monotonic::list<int> l0(sa), l1(sb);
 //
-//        for(int i = 0; i < 100; ++i)
-//            v1.push_back(i);
+//        CHECK(v0.get_allocator() == v1.get_allocator());
+//        CHECK(v2.get_allocator() == v3.get_allocator());
+//        CHECK(v0.get_allocator() != v2.get_allocator());
+//        CHECK(v3.get_allocator() != v1.get_allocator());
 //
-//        monotonic::vector<int> copy(storage);
-//        size_t len = storage.used();
-//        copy = v1;
-//        size_t len2 = storage.used();
+//        for (int n = 0; n < 10; ++n)
+//            v0.push_back(n);
 //
-//        BOOST_CHECK(copy == v1);
+//        v1 = v0;
+//        v1.swap(v2);    // swap from different allocators means they are copied
+//        CHECK(v1.empty() && v3.empty() && v1 == v3);
 //
-//        // create a list that uses inline, monotonically-increasing storage
-//        monotonic::list<int> list(storage);
-//        list.push_back(100);
-//        list.push_back(400);
-//        list.erase(list.begin());
+//        CHECK(v2 == v0); // both are now [0..9]
 //
-//        // a map from the same storage
-//        monotonic::map<int, float> map(storage);
-//        map[42] = 3.14f;
-//        BOOST_CHECK(map[42] == 3.14f);
+//        v1.swap(v0);    // swap from same allocators means no copying
+//        CHECK(v2 == v1);
+//        CHECK(v0 == v3);
 //
-//        // a set...
-//        monotonic::set<float> set(storage);
-//        set.insert(3.14f);
-//        set.insert(-123.f);
-//        BOOST_CHECK(set.size() == 2);
+//        //l0.assign(v0.begin(), v0.end());
+//        //l1 = l0;
+//        //CHECK(l0 == l1);
 //    }
 //}
+
+// TODO
+TEST_CASE("test_basic", "[basic]")
+{
+    monotonic::storage<> storage;
+    {
+        monotonic::vector<int> v1(storage);
+
+        for(int i = 0; i < 100; ++i)
+            v1.push_back(i);
+
+        monotonic::vector<int> copy(storage);
+        size_t len = storage.used();
+        copy = v1;
+        size_t len2 = storage.used();
+
+        CHECK(copy == v1);
+
+        // create a list that uses inline, monotonically-increasing storage
+        monotonic::list<int> list(storage);
+        list.push_back(100);
+        list.push_back(400);
+        list.erase(list.begin());
+
+        // a map from the same storage
+        monotonic::map<int, float> map(storage);
+        map[42] = 3.14f;
+        CHECK(map[42] == 3.14f);
+
+        // a set...
+        monotonic::set<float> set(storage);
+        set.insert(3.14f);
+        set.insert(-123.f);
+        CHECK(set.size() == 2);
+    }
+}
+
 
