@@ -1,5 +1,4 @@
 cmake_minimum_required(VERSION 3.27)
-
 set(PROJ_TESTS ${PROJ}_tests)
 
 # TODO

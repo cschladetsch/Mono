@@ -24,7 +24,7 @@ namespace boost
         struct map : detail::container<map<K,T,Region,P,Access> >
         {
             typedef P Predicate;
-            typedef allocator<K,Region,Access> Allocator;
+            typedef allocator<std::pair<const K, T>, Region,Access> Allocator;
             typedef detail::container<map<K,T,Region,P,Access> > Parent;
             typedef detail::Create<detail::is_monotonic<T>::value, T> Create;
 
